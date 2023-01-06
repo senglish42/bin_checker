@@ -1,17 +1,25 @@
 package com.example.binchecker
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import java.time.LocalDateTime
 
 class ResultActivity: AppCompatActivity() {
+
+    var recyclerView: RecyclerView? = null
+    var binPref: SharedPreferences? = null
+    var pref: SharedPreferences? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_result)
-        val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
+        recyclerView = findViewById(R.id.recyclerView)
         val backButton = findViewById<Button>(R.id.button_back)
         var scheme = "N/A"
         var length = "N/A"
@@ -26,7 +34,7 @@ class ResultActivity: AppCompatActivity() {
         var phone = "N/A"
         val bin = intent.getStringExtra("bin")?:"N/A"
         val linearLayoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
-        recyclerView.layoutManager = linearLayoutManager
+        recyclerView?.layoutManager = linearLayoutManager
         val titleList = listOf("number", "scheme", "type", "brand", "prepaid", "country", "bank")
         for (i in titleList.indices) {
             val arr = intent.getStringArrayExtra(titleList[i])!!.toMutableList()
@@ -51,9 +59,19 @@ class ResultActivity: AppCompatActivity() {
                 }
             }
         }
-        val arrList = arrayListOf(length, luhn, scheme, type, brand, prepaid, country, coordinates, bank, url, phone, bin)
-        val helperAdapter = HelperAdapter(arrayListOf(arrList), this@ResultActivity)
-        recyclerView.adapter = helperAdapter
+        binPref = getSharedPreferences("data", Context.MODE_PRIVATE)
+        val binPrefEditor = binPref?.edit()
+        val date = LocalDateTime.now()
+        binPrefEditor?.putString(bin, date.toString())?.apply()
+
+        val arrList = arrayOf(length, luhn, scheme, type, brand, prepaid, country, coordinates, bank, url, phone, bin)
+        pref = getSharedPreferences("$bin.data", Context.MODE_PRIVATE)
+        val editor = pref?.edit()
+        for (i in arrList.indices) {
+            editor?.putString("$i", arrList[i])?.apply()
+        }
+        val helperAdapter = HelperAdapter(arrayOf(arrList), this@ResultActivity)
+        recyclerView?.adapter = helperAdapter
         backButton.setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java))
         }

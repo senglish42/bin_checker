@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
-
 import android.util.Log
 import android.widget.*
 import com.android.volley.Request
@@ -19,6 +18,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val check = findViewById<Button>(R.id.check)
+        val history = findViewById<ImageView>(R.id.history)
         val editBin = findViewById<EditText>(R.id.edit_bin)
         val dtArray: Array<MutableList<String?>> = Array(7) { mutableListOf() }
         editBin.doAfterTextChanged {
@@ -33,6 +33,11 @@ class MainActivity : AppCompatActivity() {
                 check.isEnabled = false
                 check.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.gray))
             }
+        }
+
+        history.setOnClickListener {
+            val intent = Intent(this, HistoryActivity::class.java)
+            startActivity(intent)
         }
 
         check.setOnClickListener {

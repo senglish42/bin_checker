@@ -11,9 +11,8 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 
-
 class HelperAdapter(
-    private var arr: ArrayList<ArrayList<String>>,
+    private var arr: Array<Array<String>>,
     private var context: Context
 ) :
     RecyclerView.Adapter<HelperAdapter.MyViewClass>() {
@@ -48,7 +47,7 @@ class HelperAdapter(
             val crd = holder.coordinates.text.toString()
             val lat = crd.substring(11, crd.indexOf(','))
             val long = crd.substringAfterLast(": ").let { it.substring(0, it.lastIndex) }
-            val location = Uri.parse("geo:${lat}.000000,${long}.00000?z=14")
+            val location = Uri.parse("geo:$lat,$long?z=14")
             val mapIntent = Intent(Intent.ACTION_VIEW, location)
             startActivity(context, mapIntent, null)
         }
