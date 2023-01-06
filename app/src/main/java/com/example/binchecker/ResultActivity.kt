@@ -13,17 +13,18 @@ class ResultActivity: AppCompatActivity() {
         setContentView(R.layout.activity_result)
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         val backButton = findViewById<Button>(R.id.button_back)
-        var scheme = "?"
-        var length = "?"
-        var luhn = "?"
-        var type = "?"
-        var brand = "?"
-        var prepaid = "?"
-        var country = "?"
-        var coordinates = "(latitude: ?, longitude: ?)"
-        var bank = "?"
-        var url = "?"
-        var phone = "?"
+        var scheme = "N/A"
+        var length = "N/A"
+        var luhn = "N/A"
+        var type = "N/A"
+        var brand = "N/A"
+        var prepaid = "N/A"
+        var country = "N/A"
+        var coordinates = "(latitude: N/A, longitude: N/A)"
+        var bank = "N/A"
+        var url = "N/A"
+        var phone = "N/A"
+        val bin = intent.getStringExtra("bin")?:"N/A"
         val linearLayoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         recyclerView.layoutManager = linearLayoutManager
         val titleList = listOf("number", "scheme", "type", "brand", "prepaid", "country", "bank")
@@ -50,7 +51,7 @@ class ResultActivity: AppCompatActivity() {
                 }
             }
         }
-        val arrList = arrayListOf(length, luhn, scheme, type, brand, prepaid, country, coordinates, bank, url, phone)
+        val arrList = arrayListOf(length, luhn, scheme, type, brand, prepaid, country, coordinates, bank, url, phone, bin)
         val helperAdapter = HelperAdapter(arrayListOf(arrList), this@ResultActivity)
         recyclerView.adapter = helperAdapter
         backButton.setOnClickListener {

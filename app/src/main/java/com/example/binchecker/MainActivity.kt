@@ -62,6 +62,7 @@ class MainActivity : AppCompatActivity() {
                     for (i in titleList.indices) {
                         intent.putExtra(titleList[i], dtArray[i].toTypedArray())
                     }
+                    intent.putExtra("bin", editBin.text.toString())
                     startActivity(intent)
 
                 } catch (e: Exception) {

@@ -14,6 +14,15 @@
 
         <TextView
             style="@style/cardTitle"
+            android:text="@string/bin_number"/>
+        <TextView
+            style="@style/cardNormal"
+            android:id="@+id/bin"
+            android:paddingBottom="5dp"
+            android:text="@string/question"/>
+
+        <TextView
+            style="@style/cardTitle"
             android:text="@string/scheme"/>
         <TextView
             style="@style/cardNormal"
@@ -43,7 +52,6 @@
                     <TextView
                         style="@style/cardNormal"
                         android:layout_width="20dp"
-                        android:textColor="@color/gray"
                         android:text="@string/length" />
                     <TextView
                         android:id="@+id/length"
@@ -57,7 +65,6 @@
                     <TextView
                         style="@style/cardNormal"
                         android:layout_width="20dp"
-                        android:textColor="@color/gray"
                         android:text="@string/luhn" />
                     <TextView
                         android:id="@+id/luhn"
@@ -117,7 +124,7 @@
             android:layout_width="wrap_content"
             android:textAllCaps="false"
             android:paddingBottom="5dp"
-            app:drawableEndCompat="@drawable/placeholder"
+            android:enabled="false"
             android:text="@string/coordinates"/>
         <TextView
             style="@style/cardTitle"
@@ -130,6 +137,7 @@
             style="@style/cardSmall"
             android:paddingBottom="5dp"
             android:id="@+id/url"
+            android:enabled="false"
             android:text="@string/question"/>
         <TextView
             style="@style/cardTitle"
@@ -137,6 +145,8 @@
         <TextView
             style="@style/cardNormal"
             android:id="@+id/phone"
+            android:enabled="false"
+            android:paddingBottom="10dp"
             android:text="@string/question"/>
     </LinearLayout>
 

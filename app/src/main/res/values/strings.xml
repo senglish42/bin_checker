@@ -7,6 +7,7 @@
     <string name="question">\?</string>
     <string name="scheme">SCHEME/NETWORK</string>
     <string name="brand">BRAND</string>
+    <string name="bin_number">BIN NUMBER</string>
     <string name="card_number">CARD NUMBER</string>
     <string name="length">LENGTH   </string>
     <string name="luhn">LUHN   </string>
