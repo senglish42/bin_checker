@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardView"
+    app:cardCornerRadius="2dp"
+    app:cardElevation="3dp"
+    app:cardUseCompatPadding="true"
+    android:layout_margin="6dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/linearLayout"
+        android:orientation="vertical"
+        android:clickable="true"
+        android:padding="8dp">
+
+        <TextView
+            android:id="@+id/bin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableRight="@drawable/arrow_down"
+            android:paddingEnd="10dp"
+            android:paddingVertical="16dp"
+            android:paddingBottom="5dp"
+            android:text="@string/question"
+            android:textColor="@color/black"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/expandable_layout"
+            android:visibility="invisible"
+            tools:ignore="ExtraText">
+
+            <TextView
+                android:id="@+id/cardScheme"
+                style="@style/cardTitle"
+                android:text="@string/scheme"/>
+            <TextView
+                style="@style/cardNormal"
+                android:id="@+id/scheme"
+                android:paddingBottom="5dp"
+                android:text="@string/question"
+                android:layout_below="@+id/cardScheme"/>
+            <TextView
+                android:id="@+id/cardBrand"
+                style="@style/cardTitle"
+                android:text="@string/brand"
+                android:layout_below="@+id/scheme"/>
+            <TextView
+                style="@style/cardNormal"
+                android:id="@+id/brand"
+                android:paddingBottom="5dp"
+                android:text="@string/question"
+                android:layout_below="@+id/cardBrand"/>
+
+            <TableLayout
+                android:id="@+id/tableCardNumber"
+                android:layout_width="200dp"
+                android:layout_height="match_parent"
+                android:stretchColumns="*"
+                android:layout_below="@+id/brand">
+
+                <TextView
+                    android:id="@+id/cardNumber"
+                    style="@style/cardTitle"
+                    android:text="@string/card_number" />
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/cardLength"
+                        style="@style/cardNormal"
+                        android:layout_width="20dp"
+                        android:text="@string/length" />
+                    <TextView
+                        android:id="@+id/length"
+                        style="@style/cardNormal"
+                        android:text="@string/question" />
+                </TableRow>
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="5dp">
+                    <TextView
+                        style="@style/cardNormal"
+                        android:layout_width="20dp"
+                        android:text="@string/luhn" />
+                    <TextView
+                        android:id="@+id/luhn"
+                        style="@style/cardNormal"
+                        android:text="@string/question" />
+                </TableRow>
+            </TableLayout>
+
+            <TableLayout
+                android:id="@+id/tableCardType"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:stretchColumns="*"
+                android:layout_below="@+id/tableCardNumber">
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        style="@style/cardTitle"
+                        android:text="@string/type" />
+                    <TextView
+                        style="@style/cardTitle"
+                        android:text="@string/prepaid"/>
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="5dp">
+                    <TextView
+                        style="@style/cardNormal"
+                        android:id="@+id/type"
+                        android:text="@string/credit_debit"/>
+                    <TextView
+                        style="@style/cardNormal"
+                        android:id="@+id/prepaid"
+                        android:text="@string/yes_no"/>
+                </TableRow>
+            </TableLayout>
+
+            <TableLayout
+                android:id="@+id/tableCountry"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:stretchColumns="*"
+                android:layout_below="@id/tableCardType">
+                <TextView
+                    style="@style/cardTitle"
+                    android:text="@string/country"/>
+
+                <TextView
+                    style="@style/cardNormal"
+                    android:id="@+id/country"
+                    android:text="@string/question"/>
+            </TableLayout>
+            <TextView
+                style="@style/cardSmall"
+                android:id="@+id/coordinates"
+                android:layout_width="wrap_content"
+                android:textAllCaps="false"
+                android:paddingBottom="5dp"
+                android:enabled="false"
+                android:text="@string/coordinates"
+                android:layout_below="@id/tableCountry"/>
+            <TextView
+                android:id="@+id/cardBank"
+                style="@style/cardTitle"
+                android:text="@string/bank"
+                android:layout_below="@+id/coordinates"/>
+            <TextView
+                style="@style/cardNormal"
+                android:id="@+id/bank"
+                android:text="@string/question"
+                android:layout_below="@id/cardBank"/>
+            <TextView
+                style="@style/cardSmall"
+                android:paddingBottom="5dp"
+                android:id="@+id/url"
+                android:enabled="false"
+                android:text="@string/question"
+                android:layout_below="@+id/bank"/>
+            <TextView
+                android:id="@+id/cardContact"
+                style="@style/cardTitle"
+                android:text="@string/contact"
+                android:layout_below="@+id/url"/>
+            <TextView
+                style="@style/cardNormal"
+                android:id="@+id/phone"
+                android:enabled="false"
+                android:paddingBottom="10dp"
+                android:text="@string/question"
+                android:layout_below="@id/cardContact"/>
+        </RelativeLayout>
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

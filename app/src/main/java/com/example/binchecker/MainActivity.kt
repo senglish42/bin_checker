@@ -55,13 +55,13 @@ class MainActivity : AppCompatActivity() {
                                     child?.let { cit ->
                                         if (cit.length() > 0) {
                                             child.keys().forEach { ck ->
-                                                dtArray[i].add(it.optString(ck)?:"")
+                                                dtArray[i].add(it.optString(ck)?:"N/A")
                                             }
-                                        } else dtArray[i].add("")
-                                    } ?: dtArray[i].add(it.optString(ch)?:"")
+                                        } else dtArray[i].add("N/A")
+                                    } ?: dtArray[i].add(it.optString(ch)?:"N/A")
                                 }
-                            } else dtArray[i].add("")
-                        }?: dtArray[i].add(response.optString(titleList[i], ""))
+                            } else dtArray[i].add("N/A")
+                        }?: dtArray[i].add(response.optString(titleList[i], "N/A"))
                     }
                     val intent = Intent(this, ResultActivity::class.java)
                     for (i in titleList.indices) {
