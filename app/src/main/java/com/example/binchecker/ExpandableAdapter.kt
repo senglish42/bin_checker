@@ -50,15 +50,16 @@ class ExpandableAdapter(private var arr: Array<Array<String>>, private val paren
                 coordinates.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.placeholder, 0)
                 coordinates.isEnabled = true
             }
-            expandableLayout.visibility = if (arr[position][allView.lastIndex + 1] == "true") View.VISIBLE else View.GONE
+            val isExpanded = arr[position][allView.lastIndex + 1] == "true"
+            if (isExpanded) {
+                expandableLayout.visibility = View.VISIBLE
+                bin.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.arrow_up, 0)
+            } else {
+                expandableLayout.visibility = View.GONE
+                bin.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.arrow_down, 0)
+            }
             linearLayout.setOnClickListener{
-                if (arr[position][allView.lastIndex + 1] == "true") {
-                    arr[position][allView.lastIndex + 1] = "false"
-                    bin.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.arrow_up, 0)
-                } else {
-                    arr[position][allView.lastIndex + 1] = "true"
-                    bin.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.arrow_down, 0)
-                }
+                arr[position][allView.lastIndex + 1] = if (isExpanded) "false" else "true"
                 notifyItemChanged(position)
             }
             coordinates.setOnClickListener {

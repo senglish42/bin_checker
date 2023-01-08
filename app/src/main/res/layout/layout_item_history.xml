@@ -23,7 +23,6 @@
             android:id="@+id/bin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawableRight="@drawable/arrow_down"
             android:paddingEnd="10dp"
             android:paddingVertical="16dp"
             android:paddingBottom="5dp"
