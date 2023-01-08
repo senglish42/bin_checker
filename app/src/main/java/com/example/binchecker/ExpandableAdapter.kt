@@ -1,12 +1,9 @@
 package com.example.binchecker
 
-import android.content.Context
 import android.content.Intent
 import android.graphics.Paint
 import android.net.Uri
-import androidx.recyclerview.widget.RecyclerView
-import android.transition.AutoTransition
-import android.transition.TransitionManager
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +11,8 @@ import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.RecyclerView
+
 
 class ExpandableAdapter(private var arr: Array<Array<String>>, private val parent: RecyclerView):
     RecyclerView.Adapter<ExpandableAdapter.ViewHolder>() {
@@ -24,23 +23,43 @@ class ExpandableAdapter(private var arr: Array<Array<String>>, private val paren
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val value = TypedValue()
+        parent.context.theme.resolveAttribute(com.google.android.material.R.attr.colorOnPrimary, value, true)
         holder.apply {
+            url.setPaintFlags(url.paintFlags and Paint.UNDERLINE_TEXT_FLAG.inv())
+            url.setTextColor(value.data)
+            coordinates.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
+            phone.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
+            phone.isEnabled = false
+            url.isEnabled = false
+            coordinates.isEnabled = false
             for (i in allView.indices) {
-                allView[i].text = arr[position][i]
+                allView[i].text = arr[holder.bindingAdapterPosition][i]
             }
-            bin.text = "${bin.text} ${country.text.toString().substring(0,4)}"
-            if (url.text.toString() != "N/A") {
+            bin.text = "${bin.text} ${country.text.subSequence(0, 4)}"
+            if (url.text != "N/A") {
                 url.setTextColor(parent.context.getColorStateList(R.color.blue))
                 url.paintFlags = Paint.UNDERLINE_TEXT_FLAG
                 url.isEnabled = true
             }
-            if (phone.text.toString() != "N/A") {
+            if (phone.text != "N/A") {
                 phone.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.phone, 0)
                 phone.isEnabled = true
             }
-            if (!coordinates.text.toString().contains("N/A")) {
+            if (!arr[position][7].contains("N/A")) {
                 coordinates.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.placeholder, 0)
                 coordinates.isEnabled = true
+            }
+            expandableLayout.visibility = if (arr[position][allView.lastIndex + 1] == "true") View.VISIBLE else View.GONE
+            linearLayout.setOnClickListener{
+                if (arr[position][allView.lastIndex + 1] == "true") {
+                    arr[position][allView.lastIndex + 1] = "false"
+                    bin.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.arrow_up, 0)
+                } else {
+                    arr[position][allView.lastIndex + 1] = "true"
+                    bin.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.arrow_down, 0)
+                }
+                notifyItemChanged(position)
             }
             coordinates.setOnClickListener {
                 val crd = coordinates.text.toString()
@@ -64,17 +83,6 @@ class ExpandableAdapter(private var arr: Array<Array<String>>, private val paren
                 }
                 val webIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
                 ContextCompat.startActivity(parent.context, webIntent, null)
-            }
-            expandableLayout.visibility = if (arr[position][allView.lastIndex + 1] == "true") View.VISIBLE else View.GONE
-            linearLayout.setOnClickListener{
-                if (arr[position][allView.lastIndex + 1] == "true") {
-                    arr[position][allView.lastIndex + 1] = "false"
-                    bin.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.arrow_up, 0)
-                } else {
-                    arr[position][allView.lastIndex + 1] = "true"
-                    bin.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.arrow_down, 0)
-                }
-                notifyItemChanged(position)
             }
         }
     }
