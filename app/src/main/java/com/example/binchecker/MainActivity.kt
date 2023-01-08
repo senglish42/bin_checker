@@ -46,19 +46,19 @@ class MainActivity : AppCompatActivity() {
             val request = JsonObjectRequest(Request.Method.GET, url, null, { response ->
                 try {
                     val titleList = listOf("number", "scheme", "type", "brand", "prepaid", "country", "bank")
+                    val childMap = mapOf(0 to listOf("length", "luhn"), 5 to listOf( "numeric", "alpha2", "name", "emoji", "currency", "latitude", "longitude"), 6 to listOf("name", "url", "phone", "city"))
                     for (i in titleList.indices) {
                         val parent = response.optJSONObject(titleList[i])
                         parent?.let {
                             if (it.length() > 0) {
-                                it.keys().forEach{ ch ->
-                                    val child = it.optJSONObject(ch)
-                                    child?.let { cit ->
-                                        if (cit.length() > 0) {
-                                            child.keys().forEach { ck ->
-                                                dtArray[i].add(it.optString(ck)?:"N/A")
-                                            }
-                                        } else dtArray[i].add("N/A")
-                                    } ?: dtArray[i].add(it.optString(ch)?:"N/A")
+                                it.keys().withIndex().forEach{ (ind, ch) ->
+                                    for ((inx, elem) in childMap[i]!!.withIndex()) {
+                                        if (elem == ch) {
+                                            repeat(inx - ind) { dtArray[i].add("N/A") }
+                                            dtArray[i].add(it.optString(ch)?:"N/A")
+                                            break
+                                        }
+                                    }
                                 }
                             } else dtArray[i].add("N/A")
                         }?: dtArray[i].add(response.optString(titleList[i], "N/A"))
