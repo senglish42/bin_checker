@@ -34,7 +34,6 @@ class HistoryActivity: AppCompatActivity() {
         binPref?.let {
             val arr = it.all.values.toTypedArray()
             arr.sort().also { arr.reverse() }
-            if (arr.isEmpty()) return arrayOf( Array(13){"N/A"} )
             for (i in arr.indices) {
                 val bin = it.all.entries.find { t -> t.value!! == arr[i] }!!.key.toString()
                 pref = getSharedPreferences("$bin.data", Context.MODE_PRIVATE)

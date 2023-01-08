@@ -1,6 +1,8 @@
 package com.example.binchecker
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.content.ContextCompat
@@ -13,6 +15,7 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 
 class MainActivity : AppCompatActivity() {
+    var pref: SharedPreferences? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,8 +39,16 @@ class MainActivity : AppCompatActivity() {
         }
 
         history.setOnClickListener {
-            val intent = Intent(this, HistoryActivity::class.java)
-            startActivity(intent)
+            pref = getSharedPreferences("data", Context.MODE_PRIVATE)
+            if (pref?.all?.size == 0) {
+                Toast.makeText(this@MainActivity, "History of searches is empty", Toast.LENGTH_SHORT).show()
+            }
+            else {
+                pref?.let {
+                    val intent = Intent(this, HistoryActivity::class.java)
+                    startActivity(intent)
+                }
+            }
         }
 
         check.setOnClickListener {
