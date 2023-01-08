@@ -39,11 +39,11 @@ class ResultActivity: AppCompatActivity() {
         for (i in titleList.indices) {
             val arr = intent.getStringArrayExtra(titleList[i])!!.toMutableList()
             when(i) {
-                0 -> if (arr.size > 1) { length = arr[0]; luhn = arr[1] }
+                0 -> if (arr.size > 1) { length = arr[0]; luhn = if (arr[1] == "true") "YES" else "NO" }
                 1 -> if (arr[0].length > 1) scheme = arr[0]
                 2 -> if (arr[0].length > 1) type = arr[0]
                 3 -> if (arr[0].length > 1) brand = arr[0]
-                4 -> if (arr[0].length > 1) prepaid = arr[0]
+                4 -> if (arr[0].length > 1) prepaid = if (arr[0] == "true") "YES" else "NO"
                 5 -> {
                     if (arr[2].length > 1) {
                         country = "${arr[3]} ${arr[2]}"

@@ -20,7 +20,7 @@ class HistoryActivity: AppCompatActivity() {
         recyclerView = findViewById(R.id.recyclerView2)
         val linearLayoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         recyclerView?.layoutManager = linearLayoutManager
-        val helperAdapter = ExpandableAdapter(getData(), recyclerView!!)
+        val helperAdapter = ExpandableAdapter(getData(), this@HistoryActivity)
         recyclerView?.adapter = helperAdapter
         val backButton = findViewById<Button>(R.id.button_back2)
         backButton.setOnClickListener {

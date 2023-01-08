@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 
@@ -40,12 +41,23 @@ class HelperAdapter(private var arr: Array<Array<String>>, private var context: 
                 coordinates.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.placeholder, 0)
                 coordinates.isEnabled = true
             }
+            if (bank.text != "N/A") bank.isEnabled = true
+            listOf(country, coordinates).forEach { map->
+                map.setOnClickListener {
+                    val crd = coordinates.text.toString()
+                    val lat = crd.substring(11, crd.indexOf(','))
+                    val long = crd.substringAfterLast(": ").let { it.substring(0, it.lastIndex) }
+                    val location = Uri.parse("geo:0,0?q=$lat,$long(${country.text})")
+                    val mapIntent = Intent(Intent.ACTION_VIEW, location)
+                    startActivity(context, mapIntent, null)
+                }
+            }
 
-            coordinates.setOnClickListener {
+            bank.setOnClickListener {
                 val crd = coordinates.text.toString()
                 val lat = crd.substring(11, crd.indexOf(','))
                 val long = crd.substringAfterLast(": ").let { it.substring(0, it.lastIndex) }
-                val location = Uri.parse("geo:$lat,$long?z=14")
+                val location =  Uri.parse("geo:$lat,$long?q=${bank.text}")
                 val mapIntent = Intent(Intent.ACTION_VIEW, location)
                 startActivity(context, mapIntent, null)
             }

@@ -1,5 +1,6 @@
 package com.example.binchecker
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Paint
 import android.net.Uri
@@ -9,12 +10,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
+import android.widget.TableLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 
 
-class ExpandableAdapter(private var arr: Array<Array<String>>, private val parent: RecyclerView):
+class ExpandableAdapter(private var arr: Array<Array<String>>, private var context: Context):
     RecyclerView.Adapter<ExpandableAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExpandableAdapter.ViewHolder {
@@ -24,7 +26,7 @@ class ExpandableAdapter(private var arr: Array<Array<String>>, private val paren
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val value = TypedValue()
-        parent.context.theme.resolveAttribute(com.google.android.material.R.attr.colorOnPrimary, value, true)
+        context.theme.resolveAttribute(com.google.android.material.R.attr.colorOnPrimary, value, true)
         holder.apply {
             url.setPaintFlags(url.paintFlags and Paint.UNDERLINE_TEXT_FLAG.inv())
             url.setTextColor(value.data)
@@ -32,13 +34,14 @@ class ExpandableAdapter(private var arr: Array<Array<String>>, private val paren
             phone.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
             phone.isEnabled = false
             url.isEnabled = false
+            bank.isEnabled = false
             coordinates.isEnabled = false
             for (i in allView.indices) {
                 allView[i].text = arr[holder.bindingAdapterPosition][i]
             }
             bin.text = "${bin.text} ${country.text.subSequence(0, 4)}"
             if (url.text != "N/A") {
-                url.setTextColor(parent.context.getColorStateList(R.color.blue))
+                url.setTextColor(context.getColorStateList(R.color.blue))
                 url.paintFlags = Paint.UNDERLINE_TEXT_FLAG
                 url.isEnabled = true
             }
@@ -46,6 +49,7 @@ class ExpandableAdapter(private var arr: Array<Array<String>>, private val paren
                 phone.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.phone, 0)
                 phone.isEnabled = true
             }
+            if (bank.text != "N/A") bank.isEnabled = true
             if (!arr[position][7].contains("N/A")) {
                 coordinates.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.placeholder, 0)
                 coordinates.isEnabled = true
@@ -62,19 +66,28 @@ class ExpandableAdapter(private var arr: Array<Array<String>>, private val paren
                 arr[position][allView.lastIndex + 1] = if (isExpanded) "false" else "true"
                 notifyItemChanged(position)
             }
-            coordinates.setOnClickListener {
+            listOf(country, coordinates).forEach { map->
+                map.setOnClickListener {
+                    val crd = coordinates.text.toString()
+                    val lat = crd.substring(11, crd.indexOf(','))
+                    val long = crd.substringAfterLast(": ").let { it.substring(0, it.lastIndex) }
+                    val location = Uri.parse("geo:0,0?q=$lat,$long(${country.text})")
+                    val mapIntent = Intent(Intent.ACTION_VIEW, location)
+                    ContextCompat.startActivity(context, mapIntent, null)
+                }
+            }
+            bank.setOnClickListener {
                 val crd = coordinates.text.toString()
                 val lat = crd.substring(11, crd.indexOf(','))
                 val long = crd.substringAfterLast(": ").let { it.substring(0, it.lastIndex) }
-                val location = Uri.parse("geo:$lat,$long?z=14")
+                val location =  Uri.parse("geo:$lat,$long?q=${bank.text}")
                 val mapIntent = Intent(Intent.ACTION_VIEW, location)
-                ContextCompat.startActivity(parent.context, mapIntent, null)
+                ContextCompat.startActivity(context, mapIntent, null)
             }
-
             phone.setOnClickListener {
                 val phone = phone.text.toString().replace("[^0-9 +-]".toRegex(), "")
                 val phoneIntent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone, null))
-                ContextCompat.startActivity(parent.context, phoneIntent, null)
+                ContextCompat.startActivity(context, phoneIntent, null)
             }
 
             url.setOnClickListener {
@@ -83,7 +96,7 @@ class ExpandableAdapter(private var arr: Array<Array<String>>, private val paren
                     url = "http://$url"
                 }
                 val webIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                ContextCompat.startActivity(parent.context, webIntent, null)
+                ContextCompat.startActivity(context, webIntent, null)
             }
         }
     }
