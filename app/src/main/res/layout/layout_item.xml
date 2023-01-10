@@ -144,12 +144,20 @@
         <TextView
             style="@style/cardTitle"
             android:text="@string/contact"/>
-        <TextView
-            style="@style/cardNormal"
-            android:id="@+id/phone"
-            android:enabled="false"
-            android:paddingBottom="10dp"
-            android:text="@string/question"/>
+        <TableLayout
+            android:id="@+id/phoneTable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                style="@style/cardNormal"
+                android:id="@+id/phone"
+                android:enabled="false"
+                android:drawablePadding="5dip"
+                android:visibility="visible"
+                android:paddingBottom="10dp"
+                android:text="@string/question"/>
+        </TableLayout>
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

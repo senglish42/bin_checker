@@ -13,6 +13,7 @@ import android.widget.RelativeLayout
 import android.widget.TableLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 
 
@@ -31,8 +32,14 @@ class ExpandableAdapter(private var arr: Array<Array<String>>, private var conte
             url.setPaintFlags(url.paintFlags and Paint.UNDERLINE_TEXT_FLAG.inv())
             url.setTextColor(value.data)
             coordinates.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
-            phone.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
-            phone.isEnabled = false
+            for (elem in phoneList) {
+                elem.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
+                elem.isEnabled = false
+                elem.isVisible = true
+            }
+            for (i in 1..phoneList.lastIndex) {
+                phoneTable.removeView(phoneList[i])
+            }
             url.isEnabled = false
             bank.isEnabled = false
             coordinates.isEnabled = false
@@ -45,9 +52,29 @@ class ExpandableAdapter(private var arr: Array<Array<String>>, private var conte
                 url.paintFlags = Paint.UNDERLINE_TEXT_FLAG
                 url.isEnabled = true
             }
-            if (phone.text != "N/A") {
-                phone.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.phone, 0)
-                phone.isEnabled = true
+            if (phone.text.toString().contains("OR")) {
+                val split = phone.text.toString().split("OR")
+                phone.text = split[0].replace("\\s".toRegex(), "")
+                for (i in 1..split.lastIndex) {
+                    if (split[i] == "") continue
+                    val newPhone = TextView(context)
+                    newPhone.layoutParams = phone.layoutParams
+                    newPhone.typeface = phone.typeface
+                    newPhone.gravity = phone.gravity
+                    newPhone.setTextSize(TypedValue.COMPLEX_UNIT_SP,20f)
+                    newPhone.setTextColor(phone.textColors)
+                    newPhone.setPadding(0, 0, 0, 10)
+                    newPhone.text = split[i]
+                    phoneTable.addView(newPhone)
+                    phoneList.add(newPhone)
+                }
+            }
+            for (phoneTV in phoneList) {
+                if (phoneTV.text != "N/A") {
+                    phoneTV.setCompoundDrawablesWithIntrinsicBounds(R.drawable.phone, 0, 0, 0)
+                    phoneTV.isVisible = true
+                    phoneTV.isEnabled = true
+                }
             }
             if (bank.text != "N/A") bank.isEnabled = true
             if (!arr[position][7].contains("N/A")) {
@@ -84,12 +111,15 @@ class ExpandableAdapter(private var arr: Array<Array<String>>, private var conte
                 val mapIntent = Intent(Intent.ACTION_VIEW, location)
                 ContextCompat.startActivity(context, mapIntent, null)
             }
-            phone.setOnClickListener {
-                val phone = phone.text.toString().replace("[^0-9 +-]".toRegex(), "")
-                val phoneIntent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone, null))
-                ContextCompat.startActivity(context, phoneIntent, null)
+            phoneList.forEach { elem->
+                if (elem.isVisible) {
+                    elem.setOnClickListener {
+                        val phone = elem.text.toString().replace("[^0-9 +-]".toRegex(), "")
+                        val phoneIntent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone, null))
+                        ContextCompat.startActivity(context, phoneIntent, null)
+                    }
+                }
             }
-
             url.setOnClickListener {
                 var url = url.text.toString()
                 if (!url.startsWith("http://") && !url.startsWith("https://")) {
@@ -117,6 +147,8 @@ class ExpandableAdapter(private var arr: Array<Array<String>>, private var conte
         val bin: TextView = itemView.findViewById(R.id.bin)
         val expandableLayout: RelativeLayout = itemView.findViewById(R.id.expandable_layout)
         val linearLayout: LinearLayout = itemView.findViewById(R.id.linearLayout)
+        val phoneList: MutableList<TextView> = mutableListOf(phone)
+        val phoneTable: TableLayout = itemView.findViewById(R.id.phoneTable)
         val allView = arrayListOf(length, luhn, scheme, type, brand, prepaid, country, coordinates, bank, url, phone, bin)
     }
 }

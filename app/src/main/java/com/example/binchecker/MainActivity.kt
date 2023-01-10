@@ -3,11 +3,13 @@ package com.example.binchecker
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import android.util.Log
+import android.view.Gravity
 import android.widget.*
 import com.android.volley.Request
 import com.android.volley.RequestQueue
@@ -16,12 +18,14 @@ import com.android.volley.toolbox.Volley
 
 class MainActivity : AppCompatActivity() {
     var pref: SharedPreferences? = null
+    var count = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val check = findViewById<Button>(R.id.check)
         val history = findViewById<ImageView>(R.id.history)
+        val logo = findViewById<ImageView>(R.id.imageView2)
         val editBin = findViewById<EditText>(R.id.edit_bin)
         val dtArray: Array<MutableList<String?>> = Array(7) { mutableListOf() }
         editBin.doAfterTextChanged {
@@ -38,10 +42,23 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        logo.setOnClickListener {
+            when (++count) {
+                0 -> Toast.makeText(this, "Hooray! You've found something special!", Toast.LENGTH_SHORT).show()
+                in 1..2 -> Toast.makeText(this, "${4 - count} taps to go", Toast.LENGTH_SHORT).show()
+                3 -> Toast.makeText(this, "${4 - count} tap to go", Toast.LENGTH_SHORT).show()
+                4 -> {
+                    --count
+                    val webIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/senglish42"))
+                    ContextCompat.startActivity(this, webIntent, null)
+                }
+            }
+        }
+
         history.setOnClickListener {
             pref = getSharedPreferences("data", Context.MODE_PRIVATE)
             if (pref?.all?.size == 0) {
-                Toast.makeText(this@MainActivity, "History of searches is empty", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "History of searches is empty", Toast.LENGTH_SHORT).show()
             }
             else {
                 pref?.let {
